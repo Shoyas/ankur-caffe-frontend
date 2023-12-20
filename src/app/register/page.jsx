@@ -66,7 +66,7 @@ const RegisterPage = () => {
         <div className="text-center text-fontColor my-4">
           <h1>or</h1>
         </div>
-        <button className="flex gap-4 justify-center">
+        <button className="flex gap-4 justify-center" disabled={creatingUser}>
           <Image src={google} alt={"ankur-caffee"} width={24} height={24} />
           Login with Google
         </button>
