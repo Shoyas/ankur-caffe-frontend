@@ -4,6 +4,9 @@ import Image from "next/image";
 import google from "../../asset/google.png";
 import { useState } from "react";
 import Link from "next/link";
+import IconEyeSlash from "./../../components/icons/IconEyeSlash";
+import IconEye from "./../../components/icons/IconEye";
+import { signIn } from "next-auth/react";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +14,7 @@ const RegisterPage = () => {
   const [creatingUser, setCreatingUser] = useState(false);
   const [userCreated, setUserCreated] = useState(false);
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
@@ -27,9 +31,9 @@ const RegisterPage = () => {
     } else {
       setError(true);
     }
-
     setCreatingUser(false);
   };
+
   return (
     <section className="mt-8">
       <h1 className="text-center text-primary text-4xl">Register</h1>
@@ -41,12 +45,22 @@ const RegisterPage = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="relative text-fontColor">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter Password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div
+            type="button"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <IconEyeSlash /> : <IconEye />}
+          </div>
+        </div>
         <button type="submit" disabled={creatingUser}>
           Register
         </button>
@@ -60,13 +74,18 @@ const RegisterPage = () => {
         )}
         {error && (
           <div className="text-center text-primary my-4">
-            <span className="font-semibold">Error:</span> Please Try again later
+            <span className="font-semibold">Getting Error:</span> Please Try
+            again later
           </div>
         )}
         <div className="text-center text-fontColor my-4">
           <h1>or</h1>
         </div>
-        <button className="flex gap-4 justify-center" disabled={creatingUser}>
+        <button
+          className="flex gap-4 justify-center"
+          disabled={creatingUser}
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+        >
           <Image src={google} alt={"ankur-caffee"} width={24} height={24} />
           Login with Google
         </button>
